@@ -1,0 +1,24 @@
+{
+  "folders":[
+    {
+      "name": "Web",
+      "path": "web"
+    },
+    {
+      "name": "Server",
+      "path": "server"
+    },
+    {
+      "name": "Workout Service",
+      "path": "services/workout"
+    },
+    {
+      "name": "Embedding Service",
+      "path": "services/embedding"
+    },
+    {
+      "name": "NLP Service",
+      "path": "services/nlp"
+    }
+  ]
+}
