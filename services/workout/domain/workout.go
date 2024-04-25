@@ -4,11 +4,11 @@ type Workout struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
 
-	Exercises []*ExerciseData `json:"exercises"`
+	Exercises []*Exercise `json:"exercises"`
 }
 
 type WorkoutData struct {
-	Workout
+	*Workout
 	Id string `json:"id"`
 }
 
