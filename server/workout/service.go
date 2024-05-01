@@ -1,6 +1,8 @@
 package workout
 
-import "github.com/brendenehlers/workout-app/server/domain"
+import (
+	"github.com/brendenehlers/workout-app/server/domain"
+)
 
 type WorkoutService struct{}
 
@@ -10,9 +12,6 @@ func New() *WorkoutService {
 	return &WorkoutService{}
 }
 
-func (WorkoutService) CreateWorkout(request domain.CreateWorkoutRequest) (*domain.Workout, error) {
-	return &domain.Workout{
-		Name:        "My new workout",
-		Description: "Will destroy you",
-	}, nil
+func (WorkoutService) CreateWorkout(query string) (*domain.Workout, error) {
+	panic("not implemented")
 }

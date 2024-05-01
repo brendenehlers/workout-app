@@ -1,0 +1,27 @@
+package templates
+
+import (
+  "fmt"
+
+  "github.com/brendenehlers/workout-app/server/domain"
+	"strings"
+)
+
+templ Workout(workout *domain.Workout) {
+  <div id="search-results">
+    <h1>{workout.Name}</h1>
+    <p>{workout.Description}</p>
+    <div>
+      for i, exercise := range workout.Exercises {
+        <div id={fmt.Sprintf("exercise-%s-%d", strings.ToLower(exercise.Name), i)} class="exercise">
+          @Exercise(exercise)
+        </div>
+      }
+    </div>
+  </div>
+}
+
+templ Exercise(exercise domain.Exercise) {
+  <h2>{exercise.Name}</h2>
+  <p>{exercise.Description}</p>
+}

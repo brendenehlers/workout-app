@@ -12,5 +12,5 @@ type Workout struct {
 }
 
 type WorkoutService interface {
-	CreateWorkout(CreateWorkoutRequest) (*Workout, error)
+	CreateWorkout(query string) (*Workout, error)
 }
