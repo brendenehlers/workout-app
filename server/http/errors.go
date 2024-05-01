@@ -1,14 +1,16 @@
 package http
 
-type APIError interface {
+type WrappedError interface {
 	APIError() (string, int)
+	error
 }
 
 var (
 	ErrBadRequest = &apiError{msg: "invalid input", status: 400}
+	ErrInternal   = &apiError{msg: "internal server error", status: 500}
 )
 
-func WrapError(err error, apiErr *apiError) error {
+func WrapError(err error, apiErr *apiError) wrappedResponseError {
 	return wrappedResponseError{error: err, apiError: apiErr}
 }
 

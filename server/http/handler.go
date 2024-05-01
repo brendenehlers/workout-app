@@ -59,11 +59,12 @@ func handle(fn handlerFunc, w http.ResponseWriter, r *http.Request) {
 
 func handleError(w http.ResponseWriter, err error) {
 	switch e := err.(type) {
-	case APIError:
+	case WrappedError:
+		log.Println(e.Error())
 		msg, status := e.APIError()
 		http.Error(w, msg, status)
-	default:
-		log.Println("default error hit")
-		http.Error(w, "internal server error", http.StatusInternalServerError)
+	case error:
+		log.Println(e.Error())
+		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	}
 }

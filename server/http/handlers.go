@@ -35,12 +35,12 @@ func (h *handlers) Search(w http.ResponseWriter, r *http.Request) error {
 
 	workout, err := h.ws.CreateWorkout(query)
 	if err != nil {
-		return err
+		return WrapError(err, ErrInternal)
 	}
 
 	data, err := h.v.ComposeSearchData(r.Context(), workout)
 	if err != nil {
-		return err
+		return WrapError(err, ErrInternal)
 	}
 
 	w.Write(data)
