@@ -11,18 +11,20 @@ type Server struct {
 	*http.Server
 }
 
-func New(addr string, view domain.View, service domain.WorkoutService) *Server {
+func New(addr string, service domain.WorkoutService) *Server {
 	mux := http.NewServeMux()
 	handlers := &handlers{
-		view:    view,
 		service: service,
 	}
 
-	mux.HandleFunc("POST /workout/create", handlers.CreateWorkout)
+	mux.Handle("GET /public/", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
+
+	mux.HandleFunc("GET /", handlers.Index)
+	mux.HandleFunc("GET /search", handlers.Search)
 
 	return &Server{
 		Server: &http.Server{
-			Handler: mux,
+			Handler: Logger(mux),
 			Addr:    addr,
 		},
 	}

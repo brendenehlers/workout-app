@@ -1,0 +1,55 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: start;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+}
+
+.title {
+  font-size: 4rem;
+  margin: 1rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 100%;
+}
+
+form input {
+  width: 50%;
+}
+
+form button {
+  width: 15%;
+  margin: 0.5rem;
+}
+
+.result-container {
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+  align-items: center;
+
+  width: 60%;
+  text-align: center;
+}
+
+#search-result h1 {
+  font-size: 1rem;
+  font-weight: bold;
+}

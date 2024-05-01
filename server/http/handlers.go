@@ -1,30 +1,27 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
+	"path/filepath"
 
+	"github.com/a-h/templ"
 	"github.com/brendenehlers/workout-app/server/domain"
+	"github.com/brendenehlers/workout-app/server/http/templates"
 )
 
 type handlers struct {
-	view    domain.View
 	service domain.WorkoutService
 }
 
-func (h *handlers) CreateWorkout(w http.ResponseWriter, r *http.Request) {
-	var body domain.CreateWorkoutRequest
-	err := readJSON(r.Body, &body)
-	if err != nil {
-		panic(err)
-	}
+func (h *handlers) Index(w http.ResponseWriter, r *http.Request) {
+	fp := filepath.Join("public", "pages", "index.html")
+	http.ServeFile(w, r, fp)
+}
 
-	workout, err := h.service.CreateWorkout(body)
-	if err != nil {
-		panic(err)
-	}
+func (h *handlers) Search(w http.ResponseWriter, r *http.Request) {
+	query := r.URL.Query().Get("q")
+	fmt.Println(query)
 
-	err = h.view.EncodeContent(w, workout)
-	if err != nil {
-		panic(err)
-	}
+	templ.Handler(templates.SearchQuery(query)).ServeHTTP(w, r)
 }

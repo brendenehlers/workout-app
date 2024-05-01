@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <script src="https://unpkg.com/htmx.org@1.9.12"
+    integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
+    crossorigin="anonymous"></script>
+
+  <link href="/public/styles.css" rel="stylesheet" />
+</head>
+
+<body>
+  <h1 class="title">Workout App</h1>
+
+  <form hx-get="/search" hx-target=".result-container" hx-trigger="submit throttle:300ms">
+    <input type="text" name="q" hx-swap="innerHTML" placeholder="Search..." />
+    <button type="submit">Go</button>
+  </form>
+
+  <div class="result-container"></div>
+</body>
+
+</html>

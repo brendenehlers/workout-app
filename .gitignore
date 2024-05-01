@@ -25,3 +25,7 @@ node_modules/
 
 # Mac
 .DS_Store
+
+# Templ files
+*_templ.go
+*_templ.txt
