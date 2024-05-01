@@ -6,13 +6,10 @@ import (
 	"path/filepath"
 
 	"github.com/a-h/templ"
-	"github.com/brendenehlers/workout-app/server/domain"
 	"github.com/brendenehlers/workout-app/server/http/templates"
 )
 
-type handlers struct {
-	service domain.WorkoutService
-}
+type handlers struct{}
 
 func (h *handlers) Index(w http.ResponseWriter, r *http.Request) {
 	fp := filepath.Join("public", "pages", "index.html")
