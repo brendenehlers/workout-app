@@ -1,7 +1,6 @@
 package http
 
 import (
-	"fmt"
 	"net/http"
 	"path/filepath"
 
@@ -18,7 +17,6 @@ func (h *handlers) Index(w http.ResponseWriter, r *http.Request) {
 
 func (h *handlers) Search(w http.ResponseWriter, r *http.Request) {
 	query := r.URL.Query().Get("q")
-	fmt.Println(query)
 
 	templ.Handler(templates.SearchQuery(query)).ServeHTTP(w, r)
 }

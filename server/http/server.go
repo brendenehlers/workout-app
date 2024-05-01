@@ -2,9 +2,7 @@ package http
 
 import (
 	"net/http"
-	"os"
 
-	"github.com/brendenehlers/workout-app/server/config"
 	"github.com/brendenehlers/workout-app/server/log"
 
 	"github.com/go-chi/chi/middleware"
@@ -15,25 +13,31 @@ type Server struct {
 	*http.Server
 }
 
-func New(addr string) *Server {
-	r := chi.NewRouter()
-	r.Use(middleware.Logger, middleware.Recoverer)
+type ServerConfig struct {
+	Addr string
+	Dev  bool
+}
 
-	if os.Getenv(config.APP_ENV) == config.DEVELOPMENT {
+func New(cfg ServerConfig) *Server {
+	r := chi.NewRouter()
+	r.Use(middleware.RequestID, middleware.Logger, middleware.Recoverer, traceId)
+
+	if cfg.Dev {
 		r.Use(middleware.NoCache)
 	}
 
 	r.Handle("/public/*", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
 
-	handlers := &handlers{}
-
-	r.Get("/", handlers.Index)
-	r.Get("/search", handlers.Search)
+	r.Route("/", func(r chi.Router) {
+		handlers := &handlers{}
+		r.Get("/", handlers.Index)
+		r.Get("/search", handlers.Search)
+	})
 
 	return &Server{
 		Server: &http.Server{
 			Handler: r,
-			Addr:    addr,
+			Addr:    cfg.Addr,
 		},
 	}
 }
