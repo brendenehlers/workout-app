@@ -1,13 +1,15 @@
 package http
 
+import "net/http"
+
 type WrappedError interface {
 	APIError() (string, int)
 	error
 }
 
 var (
-	ErrBadRequest = &apiError{msg: "invalid input", status: 400}
-	ErrInternal   = &apiError{msg: "internal server error", status: 500}
+	ErrBadRequest = &apiError{msg: "invalid input", status: http.StatusBadRequest}
+	ErrInternal   = &apiError{msg: "internal server error", status: http.StatusInternalServerError}
 )
 
 func WrapError(err error, apiErr *apiError) wrappedResponseError {
