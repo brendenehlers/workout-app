@@ -29,3 +29,5 @@ node_modules/
 # Templ files
 *_templ.go
 *_templ.txt
+
+tmp/
