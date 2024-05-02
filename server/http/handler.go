@@ -60,11 +60,13 @@ func handle(fn handlerFunc, w http.ResponseWriter, r *http.Request) {
 func handleError(w http.ResponseWriter, err error) {
 	switch e := err.(type) {
 	case WrappedError:
-		log.Println(e.Error())
+		log.Errorf(e.Error())
 		msg, status := e.APIError()
 		http.Error(w, msg, status)
 	case error:
-		log.Println(e.Error())
+		log.Errorf(e.Error())
 		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+	default:
+		panic("invalid error type passed to handleError")
 	}
 }

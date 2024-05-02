@@ -44,6 +44,6 @@ func New(ws domain.WorkoutService, v domain.View, cfg ServerConfig) *Server {
 }
 
 func (s *Server) Start() error {
-	log.Printf("Server listening on %s\n", s.Addr)
+	log.Infof("Server listening on %s", s.Addr)
 	return s.ListenAndServe()
 }
