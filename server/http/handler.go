@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/brendenehlers/workout-app/server/log"
@@ -54,7 +55,10 @@ func handle(fn handlerFunc, w http.ResponseWriter, r *http.Request) {
 	}
 
 	// past the point of no return
-	rw.flush()
+	err := rw.flush()
+	if err != nil {
+		log.Err(err)
+	}
 }
 
 func handleError(w http.ResponseWriter, err error) {
@@ -62,11 +66,20 @@ func handleError(w http.ResponseWriter, err error) {
 	case WrappedError:
 		log.Errorf(e.Error())
 		msg, status := e.APIError()
-		http.Error(w, msg, status)
+		writeError(w, msg, status)
 	case error:
 		log.Errorf(e.Error())
-		http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		writeError(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	default:
 		panic("invalid error type passed to handleError")
 	}
+}
+
+// http.Error() adds a newline at the end of the string
+// don't want that
+func writeError(w http.ResponseWriter, error string, code int) {
+	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
+	w.Header().Set("X-Content-Type-Options", "nosniff")
+	w.WriteHeader(code)
+	fmt.Fprint(w, error)
 }

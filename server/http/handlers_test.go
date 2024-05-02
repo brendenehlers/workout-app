@@ -13,11 +13,11 @@ import (
 )
 
 func TestSearch(t *testing.T) {
-	ws := new(mocks.MockWorkoutService)
+	ws := new(mocks.WorkoutService)
 	ws.On("CreateWorkout", "foo").
 		Return(&domain.Workout{}, nil)
 
-	v := new(mocks.MockView)
+	v := new(mocks.View)
 	v.On("ComposeSearchData", context.Background(), &domain.Workout{}).
 		Return([]byte("test data"), nil)
 
@@ -37,8 +37,8 @@ func TestSearch(t *testing.T) {
 }
 
 func TestSearchInvalidQuery(t *testing.T) {
-	ws := new(mocks.MockWorkoutService)
-	v := new(mocks.MockView)
+	ws := new(mocks.WorkoutService)
+	v := new(mocks.View)
 	h := newHandlers(ws, v)
 
 	rw := &responseWriter{}

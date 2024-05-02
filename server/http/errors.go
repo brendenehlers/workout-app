@@ -12,8 +12,8 @@ var (
 	ErrInternal   = &apiError{msg: "internal server error", status: http.StatusInternalServerError}
 )
 
-func WrapError(err error, apiErr *apiError) wrappedResponseError {
-	return wrappedResponseError{error: err, apiError: apiErr}
+func WrapError(err error, apiErr *apiError) *wrappedResponseError {
+	return &wrappedResponseError{error: err, apiError: apiErr}
 }
 
 type wrappedResponseError struct {

@@ -16,6 +16,10 @@ func Warnf(format string, v ...interface{}) {
 	log.Warn().Msgf(format, v...)
 }
 
+func Err(err error) {
+	log.Error().Err(err).Msg("test")
+}
+
 func Errorf(format string, v ...interface{}) {
 	log.Error().Msgf(format, v...)
 }

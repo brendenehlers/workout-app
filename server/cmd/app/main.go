@@ -21,5 +21,5 @@ func main() {
 		Addr: addr,
 		Dev:  dev,
 	})
-	log.Fatal(server.Start())
+	log.Err(server.Start())
 }

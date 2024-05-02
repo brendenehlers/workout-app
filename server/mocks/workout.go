@@ -5,13 +5,13 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type MockWorkoutService struct {
+type WorkoutService struct {
 	mock.Mock
 }
 
-var _ domain.WorkoutService = &MockWorkoutService{}
+var _ domain.WorkoutService = &WorkoutService{}
 
-func (s *MockWorkoutService) CreateWorkout(query string) (*domain.Workout, error) {
+func (s *WorkoutService) CreateWorkout(query string) (*domain.Workout, error) {
 	args := s.Called(query)
 	return args.Get(0).(*domain.Workout), args.Error(1)
 }

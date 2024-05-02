@@ -7,13 +7,23 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type MockView struct {
+type View struct {
 	mock.Mock
 }
 
-var _ domain.View = &MockView{}
+var _ domain.View = &View{}
 
-func (m *MockView) ComposeSearchData(ctx context.Context, w *domain.Workout) ([]byte, error) {
+func (m *View) ContentType() string {
+	args := m.Called()
+	return args.Get(0).(string)
+}
+
+func (m *View) Index() ([]byte, error) {
+	args := m.Called()
+	return args.Get(0).([]byte), args.Error(1)
+}
+
+func (m *View) ComposeSearchData(ctx context.Context, w *domain.Workout) ([]byte, error) {
 	args := m.Called(ctx, w)
 	return args.Get(0).([]byte), args.Error(1)
 }

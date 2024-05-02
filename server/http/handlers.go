@@ -2,7 +2,6 @@ package http
 
 import (
 	"net/http"
-	"path/filepath"
 
 	"github.com/brendenehlers/workout-app/server/domain"
 )
@@ -20,8 +19,12 @@ func newHandlers(ws domain.WorkoutService, v domain.View) *handlers {
 }
 
 func (h *handlers) Index(w http.ResponseWriter, r *http.Request) error {
-	fp := filepath.Join("public", "pages", "index.html")
-	http.ServeFile(w, r, fp)
+	data, err := h.v.Index()
+	if err != nil {
+		return WrapError(err, ErrInternal)
+	}
+
+	h.writeData(w, data)
 
 	return nil
 }
@@ -43,7 +46,13 @@ func (h *handlers) Search(w http.ResponseWriter, r *http.Request) error {
 		return WrapError(err, ErrInternal)
 	}
 
-	w.Write(data)
+	h.writeData(w, data)
 
 	return nil
+}
+
+func (h *handlers) writeData(w http.ResponseWriter, data []byte) {
+	w.Header().Add("Content-Type", h.v.ContentType())
+	w.Write(data)
+	w.WriteHeader(http.StatusOK)
 }

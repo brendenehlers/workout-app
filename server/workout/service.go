@@ -13,5 +13,18 @@ func New() *WorkoutService {
 }
 
 func (WorkoutService) CreateWorkout(query string) (*domain.Workout, error) {
-	panic("not implemented")
+	return &domain.Workout{
+		Name:        "Killer Workout 3000",
+		Description: "Gonna hurt",
+		Exercises: []domain.Exercise{
+			{
+				Name:        "Pushups",
+				Description: "Do pushups",
+			},
+			{
+				Name:        "Situps",
+				Description: "Do situps",
+			},
+		},
+	}, nil
 }
