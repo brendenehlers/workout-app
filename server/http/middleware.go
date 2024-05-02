@@ -16,6 +16,9 @@ func traceId(next http.Handler) http.Handler {
 		traceId := uuid.New().String()
 
 		ctx := r.Context()
+		if ctx == nil {
+			ctx = context.Background()
+		}
 		ctx = context.WithValue(ctx, TraceIDKey, traceId)
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
