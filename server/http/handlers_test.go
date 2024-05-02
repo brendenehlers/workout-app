@@ -1,7 +1,6 @@
 package http
 
 import (
-	"context"
 	"errors"
 	"net/http"
 	"net/url"
@@ -10,44 +9,163 @@ import (
 	"github.com/brendenehlers/workout-app/server/domain"
 	"github.com/brendenehlers/workout-app/server/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
-func TestSearch(t *testing.T) {
-	ws := new(mocks.WorkoutService)
-	ws.On("CreateWorkout", "foo").
-		Return(&domain.Workout{}, nil)
+func TestSearchQuery(t *testing.T) {
+	testcases := []struct {
+		name       string
+		query      string
+		queryError error
+	}{
+		{"test no error", "foo", nil},
+		{"test empty query", "", ErrBadRequest},
+	}
 
-	v := new(mocks.View)
-	v.On("ComposeSearchData", context.Background(), &domain.Workout{}).
-		Return([]byte("test data"), nil)
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			ws := new(mocks.WorkoutService)
+			v := new(mocks.View)
 
-	h := newHandlers(ws, v)
+			if tc.query != "" {
+				ws.On("CreateWorkout", tc.query).
+					Return(&domain.Workout{}, nil)
 
-	rw := &responseWriter{}
-	r := buildSearchRequest("foo")
+				v.On("ComposeSearchData", mock.Anything, mock.Anything).
+					Return([]byte("view data"), nil)
 
-	err := h.Search(rw, r)
+				v.On("ContentType").Return("text/plain")
+			}
 
-	ws.AssertExpectations(t)
-	v.AssertExpectations(t)
+			h := newHandlers(ws, v)
 
-	assert.NoError(t, err)
-	assert.Equal(t, 1, len(rw.writes))
-	assert.Equal(t, "test data", string(rw.writes[0]))
+			rw := new(mocks.ResponseWriter)
+			if tc.query != "" {
+				rw.On("Header").Return(http.Header{})
+				rw.On("WriteHeader", http.StatusOK).Return()
+				rw.On("Write", []byte("view data")).Return(len("view data"), nil)
+			}
+
+			r := buildSearchRequest(tc.query)
+
+			err := h.Search(rw, r)
+
+			if tc.queryError != nil {
+				assert.Error(t, err)
+				assert.True(t, errors.Is(err, tc.queryError))
+			} else {
+				assert.NoError(t, err)
+			}
+
+			ws.AssertExpectations(t)
+			v.AssertExpectations(t)
+			rw.AssertExpectations(t)
+		})
+	}
 }
 
-func TestSearchInvalidQuery(t *testing.T) {
-	ws := new(mocks.WorkoutService)
-	v := new(mocks.View)
-	h := newHandlers(ws, v)
+func TestSearchWorkoutService(t *testing.T) {
+	testcases := []struct {
+		name         string
+		serviceData  *domain.Workout
+		serviceError error
+	}{
+		{"test no error", &domain.Workout{Name: "test"}, nil},
+		{"test empty query", nil, ErrInternal},
+	}
 
-	rw := &responseWriter{}
-	r := buildSearchRequest("")
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			ws := new(mocks.WorkoutService)
+			v := new(mocks.View)
 
-	err := h.Search(rw, r)
+			ws.On("CreateWorkout", mock.Anything).
+				Return(tc.serviceData, tc.serviceError)
 
-	assert.Error(t, err)
-	assert.True(t, errors.Is(err, ErrBadRequest))
+			if tc.serviceError == nil {
+				v.On("ComposeSearchData", mock.Anything, tc.serviceData).
+					Return([]byte("view data"), nil)
+
+				v.On("ContentType").Return("text/plain")
+			}
+
+			h := newHandlers(ws, v)
+
+			rw := new(mocks.ResponseWriter)
+			if tc.serviceError == nil {
+				rw.On("Header").Return(http.Header{})
+				rw.On("WriteHeader", http.StatusOK).Return()
+				rw.On("Write", mock.Anything).Return(1, nil)
+			}
+
+			r := buildSearchRequest("foo")
+
+			err := h.Search(rw, r)
+
+			if tc.serviceError != nil {
+				assert.Error(t, err)
+				assert.True(t, errors.Is(err, tc.serviceError))
+			} else {
+				assert.NoError(t, err)
+			}
+
+			ws.AssertExpectations(t)
+			v.AssertExpectations(t)
+			rw.AssertExpectations(t)
+		})
+	}
+}
+
+func TestSearchView(t *testing.T) {
+	testcases := []struct {
+		name      string
+		viewData  []byte
+		viewError error
+	}{
+		{"test no error", []byte("view data"), nil},
+		{"test empty query", nil, ErrInternal},
+	}
+
+	for _, tc := range testcases {
+		t.Run(tc.name, func(t *testing.T) {
+			ws := new(mocks.WorkoutService)
+			v := new(mocks.View)
+
+			ws.On("CreateWorkout", mock.Anything).
+				Return(&domain.Workout{}, nil)
+
+			v.On("ComposeSearchData", mock.Anything, mock.Anything).
+				Return(tc.viewData, tc.viewError)
+
+			if tc.viewError == nil {
+				v.On("ContentType").Return("text/plain")
+			}
+
+			h := newHandlers(ws, v)
+
+			rw := new(mocks.ResponseWriter)
+			if tc.viewError == nil {
+				rw.On("Header").Return(http.Header{})
+				rw.On("WriteHeader", http.StatusOK).Return()
+				rw.On("Write", tc.viewData).Return(len(tc.viewData), nil)
+			}
+
+			r := buildSearchRequest("foo")
+
+			err := h.Search(rw, r)
+
+			if tc.viewError != nil {
+				assert.Error(t, err)
+				assert.True(t, errors.Is(err, tc.viewError))
+			} else {
+				assert.NoError(t, err)
+			}
+
+			ws.AssertExpectations(t)
+			v.AssertExpectations(t)
+			rw.AssertExpectations(t)
+		})
+	}
 }
 
 func buildSearchRequest(query string) *http.Request {

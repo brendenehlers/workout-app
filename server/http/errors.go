@@ -29,6 +29,13 @@ func (e wrappedResponseError) APIError() (string, int) {
 	return e.apiError.APIError()
 }
 
+func (e wrappedResponseError) Error() string {
+	if e.error != nil {
+		return e.error.Error()
+	}
+	return e.apiError.msg
+}
+
 type apiError struct {
 	msg    string
 	status int
