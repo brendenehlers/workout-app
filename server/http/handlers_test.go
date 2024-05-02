@@ -2,8 +2,8 @@ package http
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
-	"net/url"
 	"testing"
 
 	"github.com/brendenehlers/workout-app/server/domain"
@@ -169,10 +169,6 @@ func TestSearchView(t *testing.T) {
 }
 
 func buildSearchRequest(query string) *http.Request {
-	return &http.Request{
-		URL: &url.URL{
-			Path:     "/search",
-			RawQuery: "q=" + query,
-		},
-	}
+	r, _ := http.NewRequest(http.MethodGet, fmt.Sprintf("/search?q=%s", query), nil)
+	return r
 }
