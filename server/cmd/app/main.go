@@ -12,10 +12,10 @@ import (
 
 func main() {
 	ws := workout.New()
-	v := html.New()
+	v := html.New(config.PagesDir)
 
 	dev := os.Getenv(config.APP_ENV) == config.DEVELOPMENT
-	addr := ":8080"
+	addr := ":4321"
 
 	server := http.New(ws, v, http.ServerConfig{
 		Addr: addr,

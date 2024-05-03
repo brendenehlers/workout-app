@@ -3,9 +3,9 @@ package html
 import (
 	"bytes"
 	"context"
-	"fmt"
 	"io"
 	"os"
+	"path/filepath"
 
 	"github.com/brendenehlers/workout-app/server/domain"
 	"github.com/brendenehlers/workout-app/server/html/templates"
@@ -28,7 +28,7 @@ func (HTMLView) ContentType() string {
 }
 
 func (h HTMLView) Index() ([]byte, error) {
-	file, err := os.Open(fmt.Sprintf("%s/index.html", h.pagesDir))
+	file, err := os.Open(filepath.Join(h.pagesDir, "index.html"))
 	if err != nil {
 		return nil, err
 	}
