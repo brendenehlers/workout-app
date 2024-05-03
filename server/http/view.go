@@ -69,13 +69,12 @@ func (vw viewWrapper) handle(w http.ResponseWriter, r *http.Request) {
 }
 
 func (vw viewWrapper) handleError(w http.ResponseWriter, r *http.Request, err error) {
+	log.Err(err)
 	switch e := err.(type) {
 	case domain.WrappedError:
-		log.Errorf(e.Error())
 		msg, status := e.APIError()
 		vw.writeError(w, r, msg, status)
 	case error:
-		log.Errorf(e.Error())
 		vw.writeError(w, r, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	default:
 		panic("invalid error type passed to handleError")

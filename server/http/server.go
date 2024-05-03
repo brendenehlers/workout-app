@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/brendenehlers/workout-app/server/domain"
@@ -44,6 +45,6 @@ func New(ws domain.WorkoutService, v domain.View, cfg ServerConfig) *Server {
 }
 
 func (s *Server) Start() error {
-	log.Infof("Server listening on %s", s.Addr)
+	log.Info(fmt.Sprintf("Server listening on %s", s.Addr))
 	return s.ListenAndServe()
 }

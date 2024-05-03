@@ -1,33 +1,29 @@
 package log
 
 import (
-	"github.com/rs/zerolog/log"
+	"log"
 )
 
-func Debugf(format string, v ...interface{}) {
-	log.Debug().Msgf(format, v...)
+func Debug(v ...interface{}) {
+	log.Printf("[DEBUG] %v\n", v...)
 }
 
-func Infof(format string, v ...interface{}) {
-	log.Info().Msgf(format, v...)
+func Info(v ...interface{}) {
+	log.Printf("[INFO] %v\n", v...)
 }
 
-func Warnf(format string, v ...interface{}) {
-	log.Warn().Msgf(format, v...)
+func Warn(v ...interface{}) {
+	log.Printf("[WARN] %v\n", v...)
 }
 
 func Err(err error) {
-	log.Error().Err(err).Msg("test")
+	log.Printf("[ERROR] %v\n", err)
 }
 
-func Errorf(format string, v ...interface{}) {
-	log.Error().Msgf(format, v...)
+func Error(v ...interface{}) {
+	log.Printf("[ERROR] %v\n", v...)
 }
 
-func Fatalf(format string, v ...interface{}) {
-	log.Fatal().Msgf(format, v...)
-}
-
-func Fatal(v interface{}) {
-	log.Fatal().Msg(v.(string))
+func Fatal(v ...interface{}) {
+	log.Printf("[FATAL] %v\n", v...)
 }
