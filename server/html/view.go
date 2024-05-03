@@ -3,6 +3,7 @@ package html
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"os"
 
@@ -10,27 +11,30 @@ import (
 	"github.com/brendenehlers/workout-app/server/html/templates"
 )
 
-type HTMLView struct{}
+type HTMLView struct {
+	pagesDir string
+}
 
 var _ domain.View = HTMLView{}
 
-func New() *HTMLView {
-	return &HTMLView{}
+func New(pagesDir string) *HTMLView {
+	return &HTMLView{
+		pagesDir: pagesDir,
+	}
 }
 
 func (HTMLView) ContentType() string {
 	return "text/html"
 }
 
-func (HTMLView) Index() ([]byte, error) {
-	buf := bytes.NewBuffer(nil)
-
-	file, err := os.Open("public/pages/index.html")
+func (h HTMLView) Index() ([]byte, error) {
+	file, err := os.Open(fmt.Sprintf("%s/index.html", h.pagesDir))
 	if err != nil {
 		return nil, err
 	}
 	defer file.Close()
 
+	buf := bytes.NewBuffer(nil)
 	_, err = io.Copy(buf, file)
 	if err != nil {
 		return nil, err
