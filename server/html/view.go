@@ -43,6 +43,16 @@ func (h HTMLView) Index() ([]byte, error) {
 	return buf.Bytes(), nil
 }
 
+func (HTMLView) Error(ctx context.Context, msg string) ([]byte, error) {
+	buf := bytes.NewBuffer(nil)
+	err := templates.Error(msg).Render(ctx, buf)
+	if err != nil {
+		return nil, err
+	}
+
+	return buf.Bytes(), nil
+}
+
 func (HTMLView) ComposeSearchData(ctx context.Context, w *domain.Workout) ([]byte, error) {
 	buf := bytes.NewBuffer(nil)
 	err := templates.Workout(w).Render(ctx, buf)

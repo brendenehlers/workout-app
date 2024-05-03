@@ -25,3 +25,10 @@ templ Exercise(exercise domain.Exercise) {
   <h2>{exercise.Name}</h2>
   <p>{exercise.Description}</p>
 }
+
+templ Error(msg string) {
+  <div id="error">
+    <h1>An error has occurred</h1>
+    <p>{msg}</p>
+  </div>
+}

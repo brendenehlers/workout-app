@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/brendenehlers/workout-app/server/domain"
 	"github.com/brendenehlers/workout-app/server/log"
 )
 
@@ -63,7 +64,7 @@ func handle(fn handlerFunc, w http.ResponseWriter, r *http.Request) {
 
 func handleError(w http.ResponseWriter, err error) {
 	switch e := err.(type) {
-	case WrappedError:
+	case domain.WrappedError:
 		log.Errorf(e.Error())
 		msg, status := e.APIError()
 		writeError(w, msg, status)
