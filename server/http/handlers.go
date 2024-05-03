@@ -36,7 +36,7 @@ func (h *handlers) Search(w http.ResponseWriter, r *http.Request) error {
 		return WrapError(nil, ErrBadRequest)
 	}
 
-	workout, err := h.ws.CreateWorkout(query)
+	workout, err := h.ws.CreateWorkout(r.Context(), query)
 	if err != nil {
 		return WrapError(err, ErrInternal)
 	}

@@ -1,5 +1,7 @@
 package domain
 
+import "context"
+
 type Exercise struct {
 	Name        string `json:"name"`
 	Description string `json:"description,omitempty"`
@@ -12,5 +14,5 @@ type Workout struct {
 }
 
 type WorkoutService interface {
-	CreateWorkout(query string) (*Workout, error)
+	CreateWorkout(context.Context, string) (*Workout, error)
 }
