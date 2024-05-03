@@ -31,8 +31,8 @@ func New(ws domain.WorkoutService, v domain.View, cfg ServerConfig) *Server {
 
 	r.Route("/", func(r chi.Router) {
 		handlers := newHandlers(ws, v)
-		r.Get("/", wrapHandler(handlers.Index))
-		r.Get("/search", wrapHandler(handlers.Search))
+		r.Get("/", viewWrapHandler(v, handlers.Index))
+		r.Get("/search", viewWrapHandler(v, handlers.Search))
 	})
 
 	return &Server{

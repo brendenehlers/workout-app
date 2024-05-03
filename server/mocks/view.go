@@ -24,7 +24,7 @@ func (m *View) Index() ([]byte, error) {
 }
 
 func (m *View) Error(ctx context.Context, msg string) ([]byte, error) {
-	args := m.Called()
+	args := m.Called(ctx, msg)
 	return args.Get(0).([]byte), args.Error(1)
 }
 

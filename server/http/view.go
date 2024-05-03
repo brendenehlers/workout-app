@@ -38,21 +38,27 @@ func (rw *responseWriter) flush() error {
 
 type handlerFunc func(w http.ResponseWriter, r *http.Request) error
 
-func (fn handlerFunc) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	handle(fn, w, r)
-}
-
-func wrapHandler(fn handlerFunc) http.HandlerFunc {
+func viewWrapHandler(v domain.View, fn handlerFunc) http.HandlerFunc {
+	vw := viewWrapper{view: v, fn: fn}
 	return func(w http.ResponseWriter, r *http.Request) {
-		handle(fn, w, r)
+		vw.handle(w, r)
 	}
 }
 
-func handle(fn handlerFunc, w http.ResponseWriter, r *http.Request) {
+type viewWrapper struct {
+	view domain.View
+	fn   handlerFunc
+}
+
+func (vw viewWrapper) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	vw.handle(w, r)
+}
+
+func (vw viewWrapper) handle(w http.ResponseWriter, r *http.Request) {
 	rw := &responseWriter{ResponseWriter: w}
 
-	if err := fn(rw, r); err != nil {
-		handleError(w, err)
+	if err := vw.fn(rw, r); err != nil {
+		vw.handleError(w, r, err)
 	}
 
 	// past the point of no return
@@ -62,25 +68,38 @@ func handle(fn handlerFunc, w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func handleError(w http.ResponseWriter, err error) {
+func (vw viewWrapper) handleError(w http.ResponseWriter, r *http.Request, err error) {
 	switch e := err.(type) {
 	case domain.WrappedError:
 		log.Errorf(e.Error())
 		msg, status := e.APIError()
-		writeError(w, msg, status)
+		vw.writeError(w, r, msg, status)
 	case error:
 		log.Errorf(e.Error())
-		writeError(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+		vw.writeError(w, r, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 	default:
 		panic("invalid error type passed to handleError")
 	}
 }
 
+func (vw viewWrapper) writeError(w http.ResponseWriter, r *http.Request, msg string, code int) {
+	data, err := vw.view.Error(r.Context(), msg)
+	if err != nil {
+		log.Err(err)
+		writeDefaultError(w)
+		return
+	}
+
+	w.Header().Set("Content-Type", vw.view.ContentType())
+	w.Write(data)
+	w.WriteHeader(code)
+}
+
 // http.Error() adds a newline at the end of the string
 // don't want that
-func writeError(w http.ResponseWriter, error string, code int) {
+func writeDefaultError(w http.ResponseWriter) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
 	w.Header().Set("X-Content-Type-Options", "nosniff")
-	w.WriteHeader(code)
-	fmt.Fprint(w, error)
+	w.WriteHeader(http.StatusInternalServerError)
+	fmt.Fprint(w, http.StatusText(http.StatusInternalServerError))
 }
