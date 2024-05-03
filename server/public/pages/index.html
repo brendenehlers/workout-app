@@ -14,7 +14,7 @@
   <h1 class="title">Workout App</h1>
 
   <form hx-get="/search" hx-target=".result-container" hx-trigger="submit throttle:300ms">
-    <input type="text" name="q" hx-swap="innerHTML" placeholder="Search..." />
+    <input type="text" name="q" hx-swap="innerHTML" required patten=".{1,}" placeholder="Search..." />
     <button type="submit">Go</button>
   </form>
 
