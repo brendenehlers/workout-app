@@ -17,6 +17,8 @@ body {
 
   width: 100vw;
   height: 100vh;
+
+  background-color: #f2f2f2;
 }
 
 .title {
@@ -36,6 +38,20 @@ body {
 
   border-radius: 8px;
 
+  transition: box-shadow 0.2s ease;
+
+  & .indicator {
+    display: none;
+  }
+
+  & .htmx-request .indicator {
+      display: inline-block;
+  }
+
+  & .htmx-request.indicator {
+      display: inline-block;
+  }
+
   .input {
     width: 100%;
     box-shadow: inset var(--secondary-color) 0 0 0 2px;
@@ -50,9 +66,10 @@ body {
     font-size: 16px;
     font-weight: 400;
     height: 40px;
+    transition: box-shadow 0.2s ease;
+    background: #fff;
 
     &:focus {
-      background: #fff;
       outline: 0;
       box-shadow: 0;
       box-shadow: inset var(--primary-color) 0 0 0 2px;
@@ -70,6 +87,13 @@ body {
       }
     }
 
+    &:disabled {
+      background-color: #f2f2f2;
+      cursor: not-allowed;
+      opacity: 0.6;
+      box-shadow: inset var(--primary-color) 0 0 0 2px; 
+    }
+
     &:has(+ .button:hover) {
       box-shadow: inset var(--primary-color) 0 0 0 2px;
     }
@@ -80,7 +104,7 @@ body {
   }
 
   .button {
-    width: 15%;
+    width: 21%;
     background-color: var(--secondary-color);
     border-radius: 0 8px 8px 0;
     border-width: 0;
@@ -102,6 +126,10 @@ body {
     -webkit-user-select: none;
     touch-action: manipulation;
     height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.2s ease;
 
     &:hover {
       background-color: var(--primary-color);
@@ -110,16 +138,27 @@ body {
     &:focus {
       filter: brightness(85%);
     }
-  }
 
-  &:hover {
-    box-shadow: 0 0 0 0 #fff inset, var(--primary-color) 0 0 0 2px;
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+      background-color: var(--primary-color);
+    }
+
+    & > span:has(+ .htmx-request) {
+      display: none;
+    }
   }
 
   &:focus-within {
     background: #fff;
     outline: 0;
     box-shadow: 0 0 0 0 #fff inset, var(--primary-color) 0 0 0 2px;
+  }
+
+  &:has(> :disabled) {
+    opacity: 0.6;
+    box-shadow: none;
   }
 }
 
@@ -145,3 +184,20 @@ body {
   border: 1px solid black;
 }
 
+#loading {
+  width: 1rem;
+  height: 1rem;
+  border: 3px solid rgba(255,255,255,.3);
+  border-radius: 50%;
+  border-top-color: var(--secondary-color);
+  animation: spin 1s ease-in-out infinite;
+  -webkit-animation: spin 1s ease-in-out infinite;
+  vertical-align: baseline;
+}
+
+@keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}
+@-webkit-keyframes spin {
+  to { -webkit-transform: rotate(360deg); }
+}

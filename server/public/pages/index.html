@@ -13,9 +13,13 @@
 <body>
   <h1 class="title">WORKOUT APP</h1>
 
-  <form class="workout-form" hx-get="/search" hx-target=".result-container" hx-trigger="submit throttle:300ms">
+  <form class="workout-form" hx-get="/search" hx-target=".result-container" hx-trigger="submit throttle:300ms"
+    hx-indicator="#loading" hx-disabled-elt="input[type='text'], button">
     <input class="input" type="text" name="q" hx-swap="innerHTML" required patten=".{1,}" placeholder="Search..." />
-    <button class="button" type="submit">GO</button>
+    <button class="button" type="submit">
+      <span>GO</span>
+      <div id="loading" class="indicator"></div>
+    </button>
   </form>
 
   <div class="result-container"></div>
