@@ -11,11 +11,11 @@
 </head>
 
 <body>
-  <h1 class="title">Workout App</h1>
+  <h1 class="title">WORKOUT APP</h1>
 
-  <form hx-get="/search" hx-target=".result-container" hx-trigger="submit throttle:300ms">
-    <input type="text" name="q" hx-swap="innerHTML" required patten=".{1,}" placeholder="Search..." />
-    <button type="submit">Go</button>
+  <form class="workout-form" hx-get="/search" hx-target=".result-container" hx-trigger="submit throttle:300ms">
+    <input class="input" type="text" name="q" hx-swap="innerHTML" required patten=".{1,}" placeholder="Search..." />
+    <button class="button" type="submit">GO</button>
   </form>
 
   <div class="result-container"></div>

@@ -1,3 +1,8 @@
+:root {
+  --primary-color: #1de9b6;
+  --secondary-color: #abacaf;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -17,25 +22,105 @@ body {
 .title {
   font-size: 4rem;
   margin: 1rem;
+  font-family: monospace;
 }
 
-form {
+.workout-form {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
 
   justify-content: center;
   align-items: center;
 
-  width: 100%;
-}
-
-form input {
   width: 50%;
-}
 
-form button {
-  width: 15%;
-  margin: 0.5rem;
+  border-radius: 8px;
+
+  .input {
+    width: 100%;
+    box-shadow: inset var(--secondary-color) 0 0 0 2px;
+    border: 0;
+    background: rgba(0, 0, 0, 0);
+    appearance: none;
+    position: relative;
+    border-radius: 8px 0 0 8px;
+    padding: 9px 12px;
+    line-height: 1.4;
+    color: rgb(0, 0, 0);
+    font-size: 16px;
+    font-weight: 400;
+    height: 40px;
+
+    &:focus {
+      background: #fff;
+      outline: 0;
+      box-shadow: 0;
+      box-shadow: inset var(--primary-color) 0 0 0 2px;
+
+      & + .button {
+        background-color: var(--primary-color);
+      }
+    }
+
+    &:hover {
+      box-shadow: inset var(--primary-color) 0 0 0 2px; 
+
+      & + .button {
+        background-color: var(--primary-color);
+      }
+    }
+
+    &:has(+ .button:hover) {
+      box-shadow: inset var(--primary-color) 0 0 0 2px;
+    }
+
+    &:has(+ .button:focus) {
+      filter: brightness(85%)
+    }
+  }
+
+  .button {
+    width: 15%;
+    background-color: var(--secondary-color);
+    border-radius: 0 8px 8px 0;
+    border-width: 0;
+    color: #333333;
+    cursor: pointer;
+    display: inline-block;
+    font-family: monospace;
+    kerning: 2px;
+    font-size: 14px;
+    font-weight: bold;
+    line-height: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 10px 12px;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    height: 100%;
+
+    &:hover {
+      background-color: var(--primary-color);
+    }
+
+    &:focus {
+      filter: brightness(85%);
+    }
+  }
+
+  &:hover {
+    box-shadow: 0 0 0 0 #fff inset, var(--primary-color) 0 0 0 2px;
+  }
+
+  &:focus-within {
+    background: #fff;
+    outline: 0;
+    box-shadow: 0 0 0 0 #fff inset, var(--primary-color) 0 0 0 2px;
+  }
 }
 
 .result-container {
@@ -59,3 +144,4 @@ form button {
   margin: 1rem;
   border: 1px solid black;
 }
+
