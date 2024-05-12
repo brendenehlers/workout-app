@@ -31,3 +31,4 @@ node_modules/
 *_templ.txt
 
 tmp/
+dist/
