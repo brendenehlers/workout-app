@@ -67,7 +67,7 @@ func TestSearchQuery(t *testing.T) {
 			v := new(mocks.View)
 
 			if tc.query != "" {
-				ws.On("CreateWorkout", tc.query).
+				ws.On("CreateWorkout", mock.Anything, tc.query).
 					Return(&domain.Workout{}, nil)
 
 				v.On("ComposeSearchData", mock.Anything, mock.Anything).
@@ -118,7 +118,7 @@ func TestSearchWorkoutService(t *testing.T) {
 			ws := new(mocks.WorkoutService)
 			v := new(mocks.View)
 
-			ws.On("CreateWorkout", mock.Anything).
+			ws.On("CreateWorkout", mock.Anything, mock.Anything).
 				Return(tc.serviceData, tc.serviceError)
 
 			if tc.serviceError == nil {
@@ -170,7 +170,7 @@ func TestSearchView(t *testing.T) {
 			ws := new(mocks.WorkoutService)
 			v := new(mocks.View)
 
-			ws.On("CreateWorkout", mock.Anything).
+			ws.On("CreateWorkout", mock.Anything, mock.Anything).
 				Return(&domain.Workout{}, nil)
 
 			v.On("ComposeSearchData", mock.Anything, mock.Anything).
