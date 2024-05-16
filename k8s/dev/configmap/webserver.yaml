@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webserver-dev
+data:
+  ENVIRONMENT: development
+  PORT: ":8080"

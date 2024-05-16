@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver-dev
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: webserver-dev
+  template:
+    metadata:
+      labels:
+        app: webserver-dev
+    spec:
+      containers:
+      - name: webserver-dev
+        image: behlers22/wa-web-server:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
+          name: http-web-svc
+        command: 
+        - "/app"
+        envFrom:
+        - configMapRef:
+            name: webserver-dev
+      
