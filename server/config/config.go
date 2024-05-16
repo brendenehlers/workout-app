@@ -3,8 +3,9 @@ package config
 import "path/filepath"
 
 const (
-	APP_ENV     = "APP_ENV"
-	DEVELOPMENT = "development"
+	EnvEnvironment = "ENVIRONMENT"
+	EnvPort        = "PORT"
+	DEVELOPMENT    = "development"
 )
 
 var (

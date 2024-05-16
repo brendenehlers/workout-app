@@ -14,8 +14,11 @@ func main() {
 	ws := workout.New()
 	v := html.New(config.PagesDir)
 
-	dev := os.Getenv(config.APP_ENV) == config.DEVELOPMENT
-	addr := ":4321"
+	dev := os.Getenv(config.EnvEnvironment) == config.DEVELOPMENT
+	addr := os.Getenv(config.EnvPort)
+	if addr == "" {
+		addr = "localhost:8080"
+	}
 
 	server := http.New(ws, v, http.ServerConfig{
 		Addr: addr,
