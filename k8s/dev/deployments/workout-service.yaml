@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workout-service-dev
+spec:
+  selector:
+    matchLabels:
+      app: workout-service-dev
+  template:
+    metadata:
+      labels:
+        app: workout-service-dev
+    spec:
+      containers:
+      - name: workout-service-dev
+        image: behlers22/wa-workout-service:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 8080
