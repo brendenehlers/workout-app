@@ -1,0 +1,8 @@
+FROM joseluisq/static-web-server:2
+
+ENV SERVER_CONFIG_FILE=/config.toml
+
+COPY ./config.toml /
+COPY ./public /public
+
+ENTRYPOINT [ "/static-web-server" ]

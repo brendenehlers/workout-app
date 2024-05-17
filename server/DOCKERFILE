@@ -26,7 +26,4 @@ FROM scratch AS final
 # Get the binary from the build step
 COPY --from=build /app /app
 
-# Copy the web resources
-COPY --from=build /src/public /public
-
 ENTRYPOINT [ "/app" ]

@@ -3,9 +3,6 @@ package html
 import (
 	"bytes"
 	"context"
-	"io"
-	"os"
-	"path/filepath"
 
 	"github.com/brendenehlers/workout-app/server/domain"
 	"github.com/brendenehlers/workout-app/server/html/templates"
@@ -25,22 +22,6 @@ func New(pagesDir string) *HTMLView {
 
 func (HTMLView) ContentType() string {
 	return "text/html"
-}
-
-func (h HTMLView) Index() ([]byte, error) {
-	file, err := os.Open(filepath.Join(h.pagesDir, "index.html"))
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	buf := bytes.NewBuffer(nil)
-	_, err = io.Copy(buf, file)
-	if err != nil {
-		return nil, err
-	}
-
-	return buf.Bytes(), nil
 }
 
 func (HTMLView) Error(ctx context.Context, msg string) ([]byte, error) {

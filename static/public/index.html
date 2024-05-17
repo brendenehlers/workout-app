@@ -7,13 +7,13 @@
     integrity="sha384-ujb1lZYygJmzgSwoxRggbCHcjc0rB2XoQrxeTUQyRjrOnlCoYta87iKBWq3EsdM2"
     crossorigin="anonymous"></script>
 
-  <link href="/public/styles.css" rel="stylesheet" />
+  <link href="/styles.css" rel="stylesheet" />
 </head>
 
 <body>
   <h1 class="title">WORKOUT APP</h1>
 
-  <form class="workout-form" hx-get="/search" hx-target=".result-container" hx-trigger="submit throttle:300ms"
+  <form class="workout-form" hx-get="/api/search" hx-target=".result-container" hx-trigger="submit throttle:300ms"
     hx-indicator="#loading" hx-disabled-elt="input[type='text'], button">
     <input class="input" type="text" name="q" hx-swap="innerHTML" required patten=".{1,}" placeholder="Search..." />
     <button class="button" type="submit">

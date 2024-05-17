@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: webserver-dev
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: webserver-dev
@@ -20,7 +20,7 @@ spec:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 8080
+        - containerPort: 80
           name: http-web-svc
         command: 
         - "/app"

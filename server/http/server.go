@@ -28,11 +28,8 @@ func New(ws domain.WorkoutService, v domain.View, cfg ServerConfig) *Server {
 		r.Use(middleware.NoCache)
 	}
 
-	r.Handle("/public/*", http.StripPrefix("/public/", http.FileServer(http.Dir("public"))))
-
-	r.Route("/", func(r chi.Router) {
+	r.Route("/api", func(r chi.Router) {
 		handlers := newHandlers(ws, v)
-		r.Get("/", viewWrapHandler(v, handlers.Index))
 		r.Get("/search", viewWrapHandler(v, handlers.Search))
 	})
 

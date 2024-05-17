@@ -4,4 +4,4 @@ metadata:
   name: webserver-dev
 data:
   ENVIRONMENT: development
-  PORT: ":8080"
+  PORT: ":80"

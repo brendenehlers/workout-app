@@ -18,17 +18,6 @@ func newHandlers(ws domain.WorkoutService, v domain.View) *handlers {
 	}
 }
 
-func (h *handlers) Index(w http.ResponseWriter, r *http.Request) error {
-	data, err := h.v.Index()
-	if err != nil {
-		return WrapError(err, ErrInternal)
-	}
-
-	h.writeData(w, data)
-
-	return nil
-}
-
 func (h *handlers) Search(w http.ResponseWriter, r *http.Request) error {
 	query := r.URL.Query().Get("q")
 

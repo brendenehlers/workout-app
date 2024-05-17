@@ -12,45 +12,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-func TestIndex(t *testing.T) {
-	testcases := []struct {
-		name      string
-		viewData  []byte
-		viewError error
-	}{
-		{"test no error", []byte("view data"), nil},
-		{"test view error", nil, ErrInternal},
-	}
-
-	for _, tc := range testcases {
-		t.Run(tc.name, func(t *testing.T) {
-			v := new(mocks.View)
-			rw := new(mocks.ResponseWriter)
-
-			v.On("Index").
-				Return(tc.viewData, tc.viewError)
-
-			if tc.viewError == nil {
-				v.On("ContentType").Return("text/plain")
-				rw.On("Header").Return(http.Header{})
-				rw.On("WriteHeader", http.StatusOK).Return()
-				rw.On("Write", tc.viewData).Return(len(tc.viewData), nil)
-			}
-
-			h := newHandlers(nil, v)
-
-			err := h.Index(rw, nil)
-
-			if tc.viewError != nil {
-				assert.Error(t, err)
-				assert.True(t, errors.Is(err, tc.viewError))
-			} else {
-				assert.NoError(t, err)
-			}
-		})
-	}
-}
-
 func TestSearchQuery(t *testing.T) {
 	testcases := []struct {
 		name       string
