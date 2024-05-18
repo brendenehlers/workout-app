@@ -1,6 +1,5 @@
 #!/bin/bash
 
-
 imageName=behlers22/wa-static-files
 tag=latest
 

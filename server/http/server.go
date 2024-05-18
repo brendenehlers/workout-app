@@ -28,7 +28,7 @@ func New(ws domain.WorkoutService, v domain.View, cfg ServerConfig) *Server {
 		r.Use(middleware.NoCache)
 	}
 
-	r.Route("/api", func(r chi.Router) {
+	r.Route("/", func(r chi.Router) {
 		handlers := newHandlers(ws, v)
 		r.Get("/search", viewWrapHandler(v, handlers.Search))
 	})

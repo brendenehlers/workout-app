@@ -6,7 +6,7 @@ port = 80
 root = "./public"
 
 #### Logging
-log-level = "debug"
+log-level = "error"
 
 #### Cache Control headers
 cache-control-headers = true
@@ -63,10 +63,10 @@ log-remote-address = false
 redirect-trailing-slash = true
 
 #### Check for existing pre-compressed files
-compression-static = true
+compression-static = false
 
 #### Health-check endpoint (GET or HEAD `/health`)
-health = false
+health = true
 
 #### List of index files
 # index-files = "index.html, index.htm"
