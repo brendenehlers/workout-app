@@ -1,0 +1,52 @@
+apiVersion: logstash.k8s.elastic.co/v1alpha1
+kind: Logstash
+metadata:
+  name: logstash
+spec:
+  count: 1
+  elasticsearchRefs:
+    - name: elasticsearch
+      clusterName: eck
+  version: 8.13.4
+  pipelines:
+    - pipeline.id: main
+      config.string: |
+        input {
+          beats {
+            port => 5044
+          }
+        }
+
+        filter {
+          grok {
+            match => { "message" => "%{HTTPD_COMMONLOG}"}
+          }
+          geoip {
+            source => "[source][address]"
+            target => "[source]"
+          }
+        }
+
+        output {
+          elasticsearch {
+            hosts => [ "${ECK_ES_HOSTS}" ]
+            cacert => "${ECK_ES_SSL_CERTIFICATE_AUTHORITY}"
+            user => "${ECK_ES_USER}"
+            password => "${ECK_ES_PASSWORD}"
+          }
+        }
+  services:
+    - name: beats
+      service:
+        spec:
+          type: NodePort
+          ports:
+            - port: 5044
+              # name: "filebeat"
+              protocol: TCP
+              targetPort: 5044
+
+
+# ssl => true
+
+
