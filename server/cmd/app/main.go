@@ -15,6 +15,8 @@ func main() {
 	v := html.New(config.PagesDir)
 
 	dev := os.Getenv(config.EnvEnvironment) == config.DEVELOPMENT
+	log.SetDebug(dev)
+
 	addr := os.Getenv(config.EnvPort)
 	if addr == "" {
 		addr = "localhost:8080"
@@ -24,5 +26,5 @@ func main() {
 		Addr: addr,
 		Dev:  dev,
 	})
-	log.Err(server.Start())
+	log.Err(server.Start(), nil)
 }

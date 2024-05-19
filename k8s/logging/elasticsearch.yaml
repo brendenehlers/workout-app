@@ -6,6 +6,7 @@ metadata:
   #annotations:
   #  eck.k8s.elastic.co/downward-node-labels: "topology.kubernetes.io/zone"
   name: elasticsearch
+  namespace: logging
 spec:
   version: 8.13.4
   nodeSets:

@@ -2,11 +2,13 @@ apiVersion: logstash.k8s.elastic.co/v1alpha1
 kind: Logstash
 metadata:
   name: logstash
+  namespace: logging
 spec:
   count: 1
   elasticsearchRefs:
     - name: elasticsearch
       clusterName: eck
+      namespace: logging
   version: 8.13.4
   pipelines:
     - pipeline.id: main
@@ -18,19 +20,16 @@ spec:
         }
 
         filter {
-          grok {
-            match => { "message" => "%{HTTPD_COMMONLOG}"}
-          }
-          geoip {
-            source => "[source][address]"
-            target => "[source]"
+          json {
+            source => message
+            target => log_data
           }
         }
 
         output {
           elasticsearch {
             hosts => [ "${ECK_ES_HOSTS}" ]
-            cacert => "${ECK_ES_SSL_CERTIFICATE_AUTHORITY}"
+            ssl_certificate_authorities => "${ECK_ES_SSL_CERTIFICATE_AUTHORITY}"
             user => "${ECK_ES_USER}"
             password => "${ECK_ES_PASSWORD}"
           }
@@ -45,8 +44,3 @@ spec:
               # name: "filebeat"
               protocol: TCP
               targetPort: 5044
-
-
-# ssl => true
-
-

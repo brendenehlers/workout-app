@@ -64,12 +64,12 @@ func (vw viewWrapper) handle(w http.ResponseWriter, r *http.Request) {
 	// past the point of no return
 	err := rw.flush()
 	if err != nil {
-		log.Err(err)
+		log.Err(err, nil)
 	}
 }
 
 func (vw viewWrapper) handleError(w http.ResponseWriter, r *http.Request, err error) {
-	log.Err(err)
+	log.Err(err, nil)
 	switch e := err.(type) {
 	case domain.WrappedError:
 		msg, status := e.APIError()
@@ -84,7 +84,7 @@ func (vw viewWrapper) handleError(w http.ResponseWriter, r *http.Request, err er
 func (vw viewWrapper) writeError(w http.ResponseWriter, r *http.Request, msg string, code int) {
 	data, err := vw.view.Error(r.Context(), msg)
 	if err != nil {
-		log.Err(err)
+		log.Err(err, nil)
 		writeDefaultError(w)
 		return
 	}

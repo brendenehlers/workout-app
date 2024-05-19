@@ -1,29 +1,37 @@
 package log
 
 import (
-	"log"
+	"os"
+
+	"github.com/sirupsen/logrus"
 )
 
-func Debug(v ...interface{}) {
-	log.Printf("[DEBUG] %v\n", v...)
+var log = logrus.New()
+
+type Fields = map[string]interface{}
+
+func init() {
+	log.Formatter = new(logrus.JSONFormatter)
+	log.Out = os.Stdout
+	log.Level = logrus.ErrorLevel
 }
 
-func Info(v ...interface{}) {
-	log.Printf("[INFO] %v\n", v...)
+func SetDebug(debug bool) {
+	if debug {
+		log.Level = logrus.DebugLevel
+	} else {
+		log.Level = logrus.ErrorLevel
+	}
 }
 
-func Warn(v ...interface{}) {
-	log.Printf("[WARN] %v\n", v...)
+func Debug(msg string, fields Fields) {
+	log.WithFields(fields).Debug(msg)
 }
 
-func Err(err error) {
-	log.Printf("[ERROR] %v\n", err)
+func Error(msg string, fields Fields) {
+	log.WithFields(fields).Error(msg)
 }
 
-func Error(v ...interface{}) {
-	log.Printf("[ERROR] %v\n", v...)
-}
-
-func Fatal(v ...interface{}) {
-	log.Printf("[FATAL] %v\n", v...)
+func Err(err error, fields Fields) {
+	log.WithError(err).WithFields(fields).Errorf(err.Error())
 }

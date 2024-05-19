@@ -22,7 +22,7 @@ type ServerConfig struct {
 
 func New(ws domain.WorkoutService, v domain.View, cfg ServerConfig) *Server {
 	r := chi.NewRouter()
-	r.Use(middleware.RequestID, middleware.Logger, middleware.Recoverer, traceId)
+	r.Use(middleware.RequestID, logger, middleware.Recoverer, traceId)
 
 	if cfg.Dev {
 		r.Use(middleware.NoCache)
@@ -42,6 +42,6 @@ func New(ws domain.WorkoutService, v domain.View, cfg ServerConfig) *Server {
 }
 
 func (s *Server) Start() error {
-	log.Info(fmt.Sprintf("Server listening on %s", s.Addr))
+	log.Debug(fmt.Sprintf("Server listening on %s", s.Addr), nil)
 	return s.ListenAndServe()
 }
