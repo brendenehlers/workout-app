@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: static-files-dev
+  namespace: development
+  labels:
+    app.kubernetes.io/name: static-files
+    app.kubernetes.io/instance: static-files-asdfgh
+    app.kubernetes.io/version: "v2"
+    app.kubernetes.io/component: frontend
+    app.kubernetes.io/part-of: workout-app
+    env: development
+spec:
+  selector:
+    matchLabels:
+      app: static-files-dev
+  template:
+    metadata:
+      namespace: development
+      labels:
+        app: static-files-dev
+        app.kubernetes.io/name: static-files
+        app.kubernetes.io/instance: static-files-asdfgh
+        app.kubernetes.io/version: "v2"
+        app.kubernetes.io/component: frontend
+        app.kubernetes.io/part-of: workout-app
+        role: replica
+        env: development
+    spec:
+      containers:
+      - name: static-files-dev
+        image: behlers22/wa-static-files:latest
+        resources:
+          limits:
+            memory: "8Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+          name: s-files-port

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: webserver-dev
+  namespace: development
+  labels:
+    app.kubernetes.io/name: web-server
+    app.kubernetes.io/instance: web-server-asdfgh
+    app.kubernetes.io/version: "v0.0.1"
+    app.kubernetes.io/component: config
+    app.kubernetes.io/part-of: workout-app
+    env: development
+data:
+  ENVIRONMENT: development
+  PORT: ":80"

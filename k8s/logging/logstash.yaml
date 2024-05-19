@@ -3,6 +3,12 @@ kind: Logstash
 metadata:
   name: logstash
   namespace: logging
+  labels:
+    app.kubernetes.io/name: logstash
+    app.kubernetes.io/instance: logstash-abcxyz
+    app.kubernetes.io/version: "v8.13.4"
+    app.kubernetes.io/component: log-ingest
+    app.kubernetes.io/part-of: logging
 spec:
   count: 1
   elasticsearchRefs:

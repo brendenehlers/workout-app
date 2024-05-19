@@ -3,6 +3,12 @@ kind: Kibana
 metadata:
   name: kibana
   namespace: logging
+  labels:
+    app.kubernetes.io/name: kibana
+    app.kubernetes.io/instance: kibana-abcxyz
+    app.kubernetes.io/version: "v8.13.4"
+    app.kubernetes.io/component: log-vis
+    app.kubernetes.io/part-of: logging
 spec:
   version: 8.13.4 
   count: 1

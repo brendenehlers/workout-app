@@ -2,6 +2,14 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: webserver-dev
+  namespace: development
+  labels:
+    app.kubernetes.io/name: web-server
+    app.kubernetes.io/instance: web-server-asdfgh
+    app.kubernetes.io/version: "v0.0.1"
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: workout-app
+    env: development
 spec:
   replicas: 1
   selector:
@@ -9,8 +17,16 @@ spec:
       app: webserver-dev
   template:
     metadata:
+      namespace: development
       labels:
         app: webserver-dev
+        app.kubernetes.io/name: web-server
+        app.kubernetes.io/instance: web-server-asdfgh
+        app.kubernetes.io/version: "v0.0.1"
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/part-of: workout-app
+        role: replica
+        env: development
     spec:
       containers:
       - name: webserver-dev

@@ -2,6 +2,7 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: filebeat
+  namespace: development
 rules:
 - apiGroups: [""] # "" indicates the core API group
   resources:
@@ -31,15 +32,17 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: filebeat
+  namespace: development
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
 metadata:
   name: filebeat
+  namespace: development
 subjects:
 - kind: ServiceAccount
   name: filebeat
-  namespace: default
+  namespace: development
 roleRef:
   kind: ClusterRole
   name: filebeat
@@ -49,6 +52,7 @@ apiVersion: beat.k8s.elastic.co/v1beta1
 kind: Beat
 metadata:
   name: filebeat
+  namespace: development
 spec:
   type: filebeat
   version: 8.13.4 
@@ -72,7 +76,7 @@ spec:
           or:
             - not:
                 equals:
-                  kubernetes.namespace: default
+                  kubernetes.namespace: development
             - equals:
                 kubernetes.container.name: filebeat
     output.logstash:
