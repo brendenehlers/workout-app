@@ -1,39 +1,37 @@
 package log
 
-import "log"
+import (
+	"os"
 
-func Print(args ...any) {
-	log.Print(args...)
+	"github.com/sirupsen/logrus"
+)
+
+var log = logrus.New()
+
+type Fields = map[string]interface{}
+
+func init() {
+	log.Formatter = new(logrus.JSONFormatter)
+	log.Out = os.Stdout
+	log.Level = logrus.ErrorLevel
 }
 
-func Printf(format string, args ...any) {
-	log.Printf(format, args...)
+func SetDebug(debug bool) {
+	if debug {
+		log.Level = logrus.DebugLevel
+	} else {
+		log.Level = logrus.ErrorLevel
+	}
 }
 
-func Println(args ...any) {
-	log.Println(args...)
+func Debug(msg string, fields Fields) {
+	log.WithFields(fields).Debug(msg)
 }
 
-func Fatal(args ...any) {
-	log.Fatal(args...)
+func Error(msg string, fields Fields) {
+	log.WithFields(fields).Error(msg)
 }
 
-func Fatalf(format string, args ...any) {
-	log.Fatalf(format, args...)
-}
-
-func Fatalln(args ...any) {
-	log.Fatalln(args...)
-}
-
-func Panic(args ...any) {
-	log.Panic(args...)
-}
-
-func Panicf(format string, args ...any) {
-	log.Panicf(format, args...)
-}
-
-func Panicln(args ...any) {
-	log.Panicln(args...)
+func Err(err error, fields Fields) {
+	log.WithError(err).WithFields(fields).Errorf(err.Error())
 }

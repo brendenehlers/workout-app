@@ -1,20 +1,21 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: webserver-service-dev
+  name: workout-service
   namespace: development
   labels:
-    app.kubernetes.io/name: web-server
-    app.kubernetes.io/instance: web-server-asdfgh
+    app.kubernetes.io/name: workout-serivce
+    app.kubernetes.io/instance: workout-service-asdfgh
     app.kubernetes.io/version: "v0.0.1"
     app.kubernetes.io/component: backend
     app.kubernetes.io/part-of: workout-app
     env: development
 spec:
   selector:
-    app: webserver-dev
+    app: workout-serivce
+    env: development
   type: LoadBalancer
   ports:
-  - port: 80
-    targetPort: http-web-svc
+  - port: 8080
+    targetPort: workout-service-port
     protocol: TCP

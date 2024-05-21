@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workout-service
+  namespace: development
+  labels:
+    app.kubernetes.io/name: workout-service
+    app.kubernetes.io/instance: workout-service-asdfgh
+    app.kubernetes.io/version: "v0.0.1"
+    app.kubernetes.io/component: backend
+    app.kubernetes.io/part-of: workout-app
+    env: development
+spec:
+  selector:
+    matchLabels:
+      app: workout-service
+      env: development
+  template:
+    metadata:
+      labels:
+        app: workout-service
+        app.kubernetes.io/name: workout-service
+        app.kubernetes.io/instance: workout-service-asdfgh
+        app.kubernetes.io/version: "v0.0.1"
+        app.kubernetes.io/component: backend
+        app.kubernetes.io/part-of: workout-app
+        env: development 
+    spec:
+      containers:
+      - name: workout-service
+        image: behlers22/wa-workout-service
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+          - containerPort: 8080
+            name: workout-service-port
+        command: 
+          - "/app"
+        envFrom:
+          - configMapRef:
+              name: workout-service
