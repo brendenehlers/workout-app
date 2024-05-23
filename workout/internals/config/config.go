@@ -7,6 +7,10 @@ import (
 	"github.com/joho/godotenv"
 )
 
+const (
+	ENV_PORT = "PORT"
+)
+
 func Init() {
 	if err := godotenv.Load(); err != nil {
 		log.Error(err.Error(), nil)
