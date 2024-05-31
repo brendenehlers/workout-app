@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"io/fs"
 	"os"
 	"testing"
@@ -48,24 +49,26 @@ func TestInitWorksWhenEnvFile(t *testing.T) {
 func TestEnv(t *testing.T) {
 	tempDir := t.TempDir()
 	os.Chdir(tempDir)
-	data := []byte(`TEST=val`)
+	key := "TEST"
+	expected := "val"
+	data := []byte(fmt.Sprintf("%s=%s", key, expected))
 	os.WriteFile(".env", data, fs.FileMode(0777))
 	Init()
 
-	testcases := []struct {
-		name     string
-		key      string
-		expected string
-	}{
-		{"test value not found", "no-val", ""},
-		{"test value found", "TEST", "val"},
-	}
+	val := Env(key)
 
-	for _, tc := range testcases {
-		t.Run(tc.name, func(tt *testing.T) {
-			val := Env(tc.key)
+	assert.Equal(t, expected, val)
+}
 
-			assert.Equal(t, tc.expected, val)
-		})
-	}
+func TestEnvPanicsIfValueNotFound(t *testing.T) {
+	tempDir := t.TempDir()
+	os.Chdir(tempDir)
+	data := []byte("TEST=val")
+	os.WriteFile(".env", data, fs.FileMode(0777))
+	Init()
+
+	key := "panics"
+	assert.PanicsWithError(t, ErrNotFound(key).Error(), func() {
+		Env(key)
+	})
 }
